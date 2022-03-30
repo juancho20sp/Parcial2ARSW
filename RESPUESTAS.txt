@@ -3,20 +3,20 @@
 
 * CONDICIÓN DE CARRERA 1:
 
-	REGIÓN CRÍTICA:
+	REGIÓN CRÍTICA: Crear vehículos al mismo tiempo.
 
-	POSIBLES INCONSISTENCIAS (SI NO SE ELIMINA):
+	POSIBLES INCONSISTENCIAS (SI NO SE ELIMINA): Puede perderse algún vehículo que se esté creando o que el usuario reciba un vehículo que no fue el que escogió.
 
-	SOLUCIÓN:
+	SOLUCIÓN: Manejar un hashmap concurrente que soporte múltiples transacciones simúltaneas.
 
 
 * CONDICIÓN DE CARRERA 2:
 
-        REGIÓN CRÍTICA:
+        REGIÓN CRÍTICA: Que dos vehículos lleguen al tiempo a la meta
 
-        POSIBLES INCONSISTENCIAS (SI NO SE ELIMINA):
+        POSIBLES INCONSISTENCIAS (SI NO SE ELIMINA): Se puede sobreescribir el registro o generar un registro inconsistente en el sistemea
 
-        SOLUCIÓN:
+        SOLUCIÓN: Generar validaciones en back y front, además de utilizar tipos de datos que soporten concurrencia.
 
 
 ....
