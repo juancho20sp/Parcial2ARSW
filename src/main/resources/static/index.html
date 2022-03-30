@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="customstyles.css" rel="stylesheet">
+        <script src="/webjars/jquery/jquery.min.js"></script>
+        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+        
+        <script src="app.js"></script>
+    </head>
+    <body>
+        
+        
+        <div class="row">
+            <div class="col-md-8">
+                <canvas id="cnv" width="640" height="480"></canvas>
+            </div>
+            <div class="col-md-4">                
+                <div>
+                    Race number:<input id="racenum" type="number" value="25"/>
+                </div>                    
+                    Racer id:<input id="playerid" type="number"/>
+                    <button  onclick="initAndRegisterInServer()" >Register for a race</button>
+                
+                
+                
+                <button  onclick="loadCompetitorsFromServer()" >Load competitors</button>
+                
+                
+            </div>            
+            <div class="col-md-4">
+                <button id="movebutton" class="controls" onclick="movex()" >MOVE MY CAR!</button>                
+            </div>
+            <div class="col-md-4">
+                Winner: <div id="winner"></div>
+            </div>
+            
+            
+        </div>
+
+        <hr>
+
+
+
+    </body>
+</html>
