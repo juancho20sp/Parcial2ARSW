@@ -7,6 +7,7 @@ package edu.eci.arsw.clickrace.services;
 
 import edu.eci.arsw.clickrace.model.RaceParticipant;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -19,5 +20,9 @@ public interface ClickRaceServices {
     public void removePlayerFromRace(int racenum,RaceParticipant rp) throws ServicesException;
     
     public Set<RaceParticipant> getRegisteredPlayers(int racenum) throws ServicesException;
+
+    public void setWinner(RaceParticipant rp) throws ServicesException;
+
+    public RaceParticipant getWinner() throws ServicesException;
     
 }

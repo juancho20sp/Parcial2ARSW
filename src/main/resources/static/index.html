@@ -6,16 +6,14 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>Hola crayola</title>
+        <title>ARSW | Juan David Murillo</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="customstyles.css" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-        <!-- <script src="/webjars/jquery/jquery.min.js"></script> -->
-        <!-- <script src="/webjars/sockjs-client/sockjs.min.js"></script> -->
-        <!-- <script src="/webjars/stomp-websocket/stomp.min.js"></script> -->
-        
+        <script src="/webjars/jquery/jquery.min.js"></script>
+        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/stomp.min.js"></script>     
         <script src="app.js"></script>
     </head>
     <body>
@@ -30,7 +28,7 @@ and open the template in the editor.
                     Race number:<input id="racenum" type="number" value="25"/>
                 </div>                    
                     Racer id:<input id="playerid" type="number"/>
-                    <button  onclick="initAndRegisterInServer()" >Register for a race</button>
+                    <button id="register" onclick="initAndRegisterInServer()" >Register for a race</button>
                 
                 
 <!--                 
@@ -49,10 +47,5 @@ and open the template in the editor.
         </div>
 
         <hr>
-
-
-        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.0/sockjs.min.js" integrity="sha512-ksHM9XpigYGeRdXZfI4GddPsUjmLj6zd1MCNXL4fsfDwp1G+u6hC73uwDjlpjdX4tbEtj/N1AWkLo6WjDwQkyA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </body>
 </html>
