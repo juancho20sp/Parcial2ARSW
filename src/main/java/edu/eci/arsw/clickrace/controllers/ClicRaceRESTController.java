@@ -14,11 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -31,9 +27,7 @@ public class ClicRaceRESTController {
 
     @Autowired
     ClickRaceServices services;
-    
-    
-    
+
     @RequestMapping(path = "/{racenum}/participants",method = RequestMethod.GET)
     public ResponseEntity<?> getRaceParticipantsNums(@PathVariable(name = "racenum") String racenum) {
         
@@ -47,7 +41,6 @@ public class ClicRaceRESTController {
             return new ResponseEntity<>("/{racenum}/ must be an integer value.",HttpStatus.BAD_REQUEST);
         }
     }
-    
 
     @RequestMapping(path = "/{racenum}/participants",method = RequestMethod.PUT)
     public ResponseEntity<?> addParticipantNum(@PathVariable(name = "racenum") String racenum,@RequestBody RaceParticipant rp) {

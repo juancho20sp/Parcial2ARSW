@@ -17,7 +17,8 @@ var stompClient = null;
 movex = function(){    
     mycarxpos+=10;
     paintCars();
-    stompClient.send("/topic/car"+mycar.number, {}, JSON.stringify({car:mycar.number,xpos:mycarxpos}));
+    stompClient.send("/topic/car"+mycar.number, {}, JSON.stringify({car:mycar.number,xpos:mycarxpos})); 
+    // stompClient.send("localhost:8080/topic/car"+mycar.number, {}, JSON.stringify({car:mycar.number,xpos:mycarxpos}));
 };
 
 
@@ -25,9 +26,13 @@ initAndRegisterInServer = function(){
     mycar={number:$("#playerid").val()};
     mycarxpos=10;
     mycarypos=10;
+
+    carsCurrentXPositions[mycar.number] = mycarxpos;
+    carsCurrentYPositions[mycar.number] = mycarypos;
     
     $.ajax({
         url: "races/25/participants",
+        // url: "localhost:8080/races/25/participants",
         type: 'PUT',
         data: JSON.stringify(mycar),
         contentType: "application/json"
@@ -35,6 +40,15 @@ initAndRegisterInServer = function(){
             function(){                
                 alert("Competitor registered successfully!");
                 paintCars();
+
+                // $
+                loadCompetitorsFromServer();
+
+                // $
+                // connectAndSubscribeToCompetitors();
+// 
+                // Notify everyone that a new car is created
+                // stompClient.send("/topic/totalCars", {}, JSON.stringify({cars: loadedCars})); 
             },
             function(err){
                 alert("err:"+err.responseText);
@@ -48,6 +62,7 @@ loadCompetitorsFromServer = function () {
         alert('Register your car first!');
     } else {
         $.get("races/25/participants",
+        // $.get("localhost:8080/races/25/participants",
                 function (data) {
                     loadedCars = data;
                     var carCount = 1;
@@ -61,6 +76,17 @@ loadCompetitorsFromServer = function () {
                                 }
                             }
                     );
+
+                // Notify everyone that a new car is created
+                stompClient.send("/topic/totalCars", {}, JSON.stringify({
+                    loadedCars,
+                    carsCurrentXPositions,
+                    carsCurrentYPositions
+                })); 
+
+                    // $
+                    console.log(`Cars on server: ${carCount}`);
+
                     paintCars();
                     connectAndSubscribeToCompetitors();
                 }
@@ -69,29 +95,48 @@ loadCompetitorsFromServer = function () {
 
 };
 
+// $
+// function connect() {
+//     var socket = new SockJS('/stompendpoint');
+//     stompClient = Stomp.over(socket);
+//     stompClient.connect({}, () => cons)
+// }
 
 function connectAndSubscribeToCompetitors() {
-    var socket = new SockJS('/stompendpoint');
-    stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
+    // var socket = new SockJS('/stompendpoint');
+    // // var socket = new SockJS('localhost:8080/stompendpoint');
+    // stompClient = Stomp.over(socket);
+    // stompClient.connect({}, function (frame) {
+    //     console.log('Connected: ' + frame);
 
-        loadedCars.forEach(
+    //     // $
+    //     debugger;
+
+    //     loadedCars.forEach(
                 
-                function (car) {
-                    //don't load my own car
-                    if (car.number!=mycar.number){
-                        stompClient.subscribe('/topic/car'+car.number, function (data) {
-                            msgdata=JSON.parse(data.body);
-                            carsCurrentXPositions[msgdata.car]=msgdata.xpos;   
-                            paintCars();
-                        });
-                    }
-                }
-        );
+    //             function (car) {
+    //                 //don't load my own car
+    //                 if (car.number!=mycar.number){
+    //                     stompClient.subscribe('/topic/car'+car.number, function (data) {
+    //                         msgdata=JSON.parse(data.body);
+    //                         carsCurrentXPositions[msgdata.car]=msgdata.xpos;   
+    //                         paintCars();
+    //                     });
+
+    //                     // $
+    //                     // Subscribe to total cars
+    //                     stompClient.subscribe('/topic/totalCars', (data) => {
+    //                         console.log(data);
+    //                         debugger;
+    //                     })
+
+
+    //                 }
+    //             }
+    //     );
 
         
-    });
+    // });
 }
 
 function disconnect() {
@@ -107,6 +152,9 @@ paintCars=function(){
     ctx=canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // $
+    debugger;
+
     //paint my car
     paint(mycar,mycarxpos,mycarypos,ctx);
     
@@ -114,6 +162,7 @@ paintCars=function(){
     loadedCars.forEach(
             function(car){
                 paint(car,carsCurrentXPositions[car.number],carsCurrentYPositions[car.number],ctx);
+
             }
     );
 };
@@ -139,6 +188,44 @@ $(document).ready(
             console.info('loading script!...');
             $(".controls").prop('disabled', false);    
             $("#racenum").prop('disabled', true);    
+
+
+            // $
+            var socket = new SockJS('/stompendpoint');
+            // var socket = new SockJS('localhost:8080/stompendpoint');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+                console.log('Connected: ' + frame);
+
+                loadedCars.forEach(
+                        
+                        function (car) {
+                            //don't load my own car
+                            if (car.number!=mycar.number){
+                                stompClient.subscribe('/topic/car'+car.number, function (data) {
+                                    msgdata=JSON.parse(data.body);
+                                    carsCurrentXPositions[msgdata.car]=msgdata.xpos;   
+                                    paintCars();
+                                });                              
+                            }
+                        }
+                );
+
+                // $
+                // Subscribe to total cars
+                stompClient.subscribe('/topic/totalCars', (data) => {
+                    console.log(data);
+                    console.log('new car added');
+
+                    loadedCars = JSON.parse(data.body).loadedCars;
+                    carsCurrentXPositions = JSON.parse(data.body).carsCurrentXPositions;
+                    carsCurrentYPositions = JSON.parse(data.body).carsCurrentYPositions;
+
+                    paintCars();
+                })
+
+                
+            });
         }
 );
 
